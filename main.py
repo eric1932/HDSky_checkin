@@ -17,27 +17,10 @@ from baidu_api import APP_ID, API_KEY, SECRET_KEY
 MAX_RETRY = 5
 
 
-def get_driver(browser: str, headless=False, proxy=None):
-    if "chrome".startswith(browser.lower()):
-        options = webdriver.ChromeOptions()
-        options.add_argument('ignore-certificate-errors')
-        if headless:
-            # options.add_argument("--headless")
-            options.headless = True
-        if proxy:
-            options.add_argument('--proxy-server={0}'.format(proxy.proxy))
-        return webdriver.Chrome(options=options)
-    elif "firefox".startswith(browser.lower()):
-        profile = webdriver.FirefoxProfile()
-        profile.accept_untrusted_certs = True
-        options = webdriver.FirefoxOptions()
-        if headless:
-            options.headless = True
-        if proxy:
-            profile.set_proxy(proxy.selenium_proxy())
-        return webdriver.Firefox(firefox_profile=profile, options=options)
-    else:
-        pass
+def get_chrome_driver():
+    options = webdriver.ChromeOptions()
+    options.headless = True
+    return webdriver.Chrome(options=options)
 
 
 def convert(src):
@@ -62,12 +45,14 @@ def convert(src):
     return encoded_image.tobytes()
 
 
-if __name__ == '__main__':
+def sign_in():
+    # 百度OCR API
     ocr_client = AipOcr(APP_ID, API_KEY, SECRET_KEY)
 
-    driver = get_driver(browser="c", headless=True)
+    driver = get_chrome_driver()
     driver.get("https://hdsky.me/")
 
+    # read cookies
     with open('cookies.json') as f:
         cookies = f.read()
         cookies = json.loads(cookies)
@@ -130,3 +115,7 @@ if __name__ == '__main__':
         print("今日已签到")
 
     driver.close()
+
+
+if __name__ == '__main__':
+    sign_in()
