@@ -52,6 +52,8 @@ def sign_in():
     driver = get_chrome_driver()
     driver.get("https://hdsky.me/")
 
+    to_return = ""
+
     # read cookies
     with open('cookies.json') as f:
         cookies = f.read()
@@ -110,11 +112,15 @@ def sign_in():
             # TODO 重试
         else:
             match = re.search(r"成功,魔力值加([0-9]+)", result)
-            print(match.group(0))
+            to_return = match.group(0)
+            print(to_return)
     else:
-        print("今日已签到")
+        to_return = "今日已签到"
+        print(to_return)
 
     driver.close()
+    driver.quit()  # release memory
+    return to_return
 
 
 if __name__ == '__main__':
