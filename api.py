@@ -16,8 +16,9 @@ if not os.path.exists(log_file_path):
 
 def background_sign_in():
     result = sign_in()
-    with open(log_file_path, 'w') as f:
-        f.write(result)
+    if result != "今日已签到":
+        with open(log_file_path, 'w') as f:
+            f.write(result)
 
 
 @app.get("/")
