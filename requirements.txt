@@ -1,0 +1,6 @@
+baidu-aip==2.2.18.0
+fastapi
+numpy
+opencv-python
+requests
+selenium
